@@ -1,0 +1,27 @@
+头文件需要
+#include "stdlib.h"
+
+
+
+
+int a = 666;
+int * p = (int *)malloc(sizeof(int)*N);//N自己定义大小
+* p = a;//此时a的值可以赋值给* P
+printf("%d",*p);
+
+结果：666
+
+一般的指针定义
+
+错误：
+int  a = 666；
+int *p ;
+*p = a;
+结果：编译错误的
+
+正确：
+int  a = 666；
+int *p ;
+p = &a;
+printf("%d",*p);
+结果：666

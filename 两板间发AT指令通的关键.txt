@@ -1,0 +1,31 @@
+if((USART3_RX_BUF[0]=='#')&&(USART3_RX_BUF[1]=='@'))
+		{
+		Receive_Data(res ,data);
+		}					//加了if((USART3_RX_BUF[0]=='#')&&(USART3_RX_BUF[1]=='@'))
+							单片机通讯项目需要的信号可以接收。
+		
+	else	if(USART_GetITStatus(USART3, USART_IT_IDLE) != RESET) 
+    {
+			USART_ClearITPendingBit(USART3, USART_IT_IDLE);
+			
+
+			
+//if(USART2_RX_STA&0x8000) //???? 
+//	{
+			len=USART3_RX_STA&0xfff;//????????????
+			USART3_RX_STA=0;	//??????	
+			USART3_RX_BUF[len]=0;//?????????
+//	}                                                                                               //去除了if(USART2_RX_STA&0x8000) 的判断后，执行了以下函数，清除缓存。
+	
+        clear = USART3->SR; // clear
+        clear = USART3->DR; // clear
+	
+			if	((USART3_RX_BUF[0]!='#')&&(USART3_RX_BUF[1]!='@'))
+			{
+
+			if(strcmp(USART3_RX_BUF,"Power Board v1.0")==0) //?????
+			{
+				USART_SendString(USART2, "Power Board v1.0");
+//				printf("Power Board v1.0");
+			}
+		}

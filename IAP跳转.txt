@@ -1,0 +1,36 @@
+IAP的APP 
+
+1.int main(void)
+{
+SCB->VTOR = FLASH_BASE | 0x3000;//加入该代码，0x3000为bootload的大小。
+
+while（1）
+{
+
+
+}
+
+
+}
+
+2.修改IROM的起始地址，单片机的默认程序运行地址为0x8000000，因为bootload的大小为0X3000，所有
+修改为0x8003000为APP的起始地址。
+
+
+注：上述两者缺一不可。
+
+bootload和APP程序不可共用一个TIM定时器。
+
+跳转前后打开和关闭总中断。
+常常使用
+
+void __disable_irq (void);//关闭总中断
+
+void __enable_irq (void);//开放总中断
+
+
+
+
+得关闭中断：__disable_irq();
+2、切换前要将boot开启的外设中断DISABLE掉如：USART_Cmd(USART1, DISABLE); （没有disable掉切换可能会有bug）或者恢复复位状态USART_DeInit(USART1);
+3、切换到APP后要开启中断__enable_irq();

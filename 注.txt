@@ -1,0 +1,95 @@
+该版加入了GPS灯的指示，加入了都HUB芯片的引脚应用，优化了RGB灯闪烁的问题，定位在RGB的show（）函数。优化了Power Board发送和都电池信号时序
+的问题。
+5.26：优化了通信处理部分，例if((USART3_RX_STA |= 0x8000)) //½ÓÊÕÍê³É
+	{
+			len=USART3_RX_STA & 0x3fff;//½ÓÊÕµ½µÄ³¤¶È
+			USART3_RX_STA=0;	//½ÓÊÕ±ê¼ÇÇåÁã			
+			USART3_RX_BUF[len] = 0;//½ÓÊÕ»º´æÇøºóÃæÇåÁã
+
+	}
+
+if (USART_GetITStatus(USART3, USART_IT_RXNE) != RESET) //½ÓÊÕµ½Êý¾Ý
+	{
+		res = USART_ReceiveData(USART3);
+		Receive_Data(res ,data);
+..................
+//Receive_Data(res ,data);函数的位置变更到了该处
+6.4：修复了tim定时器IAP跳转后和APP冲突的问题。
+加了跳转前后的关闭中断函数
+
+	void SoftReset(void) 
+	
+	{ 
+		
+//	__set_FAULTMASK(1);      // 
+		__disable_irq();//复位前的关闭总中断函数使用了__disable_irq();
+	NVIC_SystemReset();// ¸´Î»
+	}
+
+void iap_load_app(u32 appxaddr)
+{
+__disable_irq(); //跳转函数处加入了该函数
+	if(((*(vu32*)appxaddr)&0x2FFE0000)==0x20000000)	//¼ì²éÕ»¶¥µØÖ·ÊÇ·ñºÏ·¨.
+	{ 
+		jump2app=(iapfun)*(vu32*)(appxaddr+4);		//ÓÃ»§´úÂëÇøµÚ¶þ¸ö×ÖÎª³ÌÐò¿ªÊ¼µØÖ·(¸´Î»µØÖ·)		
+		MSR_MSP(*(vu32*)appxaddr);			//³õÊ¼»¯APP¶ÑÕ»Ö¸Õë(ÓÃ»§´úÂëÇøµÄµÚÒ»¸ö×ÖÓÃÓÚ´æ·ÅÕ»¶¥µØÖ·)
+//		INTX_DISABLE();
+		jump2app();									//Ìø×ªµ½APP.
+	}
+}		
+
+6.9：修复了（尚未解决，能解析出该BIN大型文件的头，但是后面数据会丢包），USB HUB板能接到完整的BIN文件的信息。具体修改了部分中断服务函数
+	if ((USART2_RX_STA & 0x8000) == 0) //½ÓÊÕÎ´Íê³É
+		{
+			if (USART2_RX_STA & 0x4000) //½ÓÊÕµ½ÁË0x0d
+			{
+//				if (Res != 0x0a)
+//					USART2_RX_STA = 0; //½ÓÊÕ´íÎó,ÖØÐÂ¿ªÊ¼
+//				else
+					USART2_RX_STA |= 0x8000; ½ÓÊÕÍê³ÉÁË   【注释了该3行判断代码实现了上面所述的6.9的功能】
+			}
+			else //»¹Ã»ÊÕµ½0X0D
+			{
+				if (Res == 0x0d)
+					USART2_RX_STA |= 0x4000;
+				else
+				{
+					USART2_RX_BUF[USART2_RX_STA & 0X3FFF] = Res;
+					USART2_RX_STA++;
+					if (USART2_RX_STA > (USART_REC_LEN1 - 1))
+						USART2_RX_STA = 0; //½ÓÊÕÊý¾Ý´íÎó,ÖØÐÂ¿ªÊ¼½ÓÊÕ
+				}
+			}
+		}	
+6.18：加入DMA串口2的TX和RX的功能，并且串口2加入了DMA的中断服务函数，测试均达到预期，串口2的RX的DMA存储采用乒乓结构的二级缓存
+
+6.23：优化了接收中断函数接收完成的标志位判断。
+具体位置如下：
+之前：if((USART2_RX_STA |= 0x8000)) //½ÓÊÕÍê³É
+	{
+
+			len=USART2_RX_STA & 0x3fff;//????????????
+			USART2_RX_STA=0;	//??????	
+			USART2_RX_BUF[len]=0;//?????????
+//		memset(USART2_RX_BUF, 0, sizeof(USART2_RX_BUF));
+		
+	}
+
+改为
+
+现在：
+u16 USART2_RX_STA_FLAG ；
+
+if((USART2_RX_STA_FLAG = USART2_RX_STA & 0xC000)) //½ÓÊÕÍê³É
+	{
+		if(USART2_RX_STA_FLAG == 0xC000 )//½ÓÊÕÍê³É±êÖ¾
+		{
+			len=USART2_RX_STA & 0x3fff;//????????????
+			USART2_RX_STA=0;	//??????	
+			USART2_RX_BUF[len]=0;//?????????
+//		memset(USART2_RX_BUF, 0, sizeof(USART2_RX_BUF));
+		}
+	}
+6.23：正点原子的完整性串口接收函数的USART_RX_STA主要是针对于，PC到单片机的字符串发送，总是结尾会有0x0d(回车键) 0x0a（换行键），所以
+可用USART_RX_STA去判断，【适用于PC到串口字符串的发送，然后单片机串口解析可用到该函数，单片机到单片机间结尾没有0x0d(回车键) 0x0a（换行键）
+所以不适用于单片机到单片机间的串口中断接收函数。

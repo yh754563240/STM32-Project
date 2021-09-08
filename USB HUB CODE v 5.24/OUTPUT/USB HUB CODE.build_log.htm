@@ -1,0 +1,75 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.15
+Copyright (C) 2015 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information:  ,  , LIC=47GU5-G1MBE-744S0-B424G-DEABN-BBHAY
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Standard  Version: 5.15.0
+Toolchain Path:  F:\keil 5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.05 update 2 (build 169)
+Assembler:       Armasm.exe V5.05 update 2 (build 169)
+Linker/Locator:  ArmLink.exe V5.05 update 2 (build 169)
+Library Manager: ArmAr.exe V5.05 update 2 (build 169)
+Hex Converter:   FromElf.exe V5.05 update 2 (build 169)
+CPU DLL:         SARMCM3.DLL V5.15.0
+Dialog DLL:      DCM.DLL V1.13.2.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V2.0.15.0_KEIL
+Dialog DLL:      TCM.DLL V1.14.5.0
+ 
+<h2>Project:</h2>
+G:\¹¤×÷MDS\CODE 7.9\4.22µÚ¶þ°æCODE\4.27ÖÕ¼«°æË«°å´úÂë£¨Ä¿Ç°£©\IAP v 7.19\USB HUB CODE v 5.24\USER\USB HUB CODE.uvprojx
+Project File Date:  07/09/2021
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.05 update 2 (build 169)', folder: 'F:\keil 5\ARM\ARMCC\Bin'
+Build target 'USB HUB CODE'
+compiling usart.c...
+..\HARDWARE\usart.c(581): warning:  #1293-D: assignment in condition
+  if((USART2_RX_STA_FLAG = USART2_RX_STA & 0xC000)) //?????ê³?
+..\HARDWARE\usart.c(594): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+                        if(strcmp(USART2_RX_BUF,"imedis+HUB+V")==0) //?????
+..\HARDWARE\usart.c(598): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+                        if(strcmp(USART2_RX_BUF,"imedis+HUB+UPDATA")==0) //?????
+..\HARDWARE\usart.c(603): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+                        if(strcmp(USART2_RX_BUF,"imedis+HUB+UPDATA1")==0) //?????
+..\HARDWARE\usart.c(609): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+                                if(strcmp(USART2_RX_BUF,"imedis+PB+UPDATA")==0) //?????
+..\HARDWARE\usart.c(613): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+                        if(strcmp(USART2_RX_BUF,"imedis+PB+UPDATA1")==0) //?????
+..\HARDWARE\usart.c(617): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+                        if(strcmp(USART2_RX_BUF,"imedis+PB+V")==0) //?????
+..\HARDWARE\usart.c(625): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "u8 *"
+                                DMA_USART2_Tx_Data(sen1,sizeof(sen1));
+..\HARDWARE\usart.c(631): warning:  #177-D: variable "sen2" was declared but never referenced
+                                char sen2[] = {"DMA33"};
+..\HARDWARE\usart.c(808): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+                        if(strcmp(USART3_RX_BUF,"Power Board v1.0.1")==0) //?????
+..\HARDWARE\usart.c(813): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+                        if(strcmp(USART3_RX_BUF,"PW???ë¸???Ä£Ê½?É¹¦£¡£?5???????Â³????Ô¶?Ö´?Ð¾É³???")==0) //?????
+..\HARDWARE\usart.c(818): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+                                if(strcmp(USART3_RX_BUF,"PB?Ì¼þ¸????ê³?!")==0) //?????
+..\HARDWARE\usart.c(823): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+                        if(strcmp(USART3_RX_BUF,"¿ªÊ¼Ö´??PB???Â¹Ì¼þ´???!!")==0) //?????
+..\HARDWARE\usart.c(828): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+                        if(strcmp(USART3_RX_BUF,"Ã»?Ð¿??Ô¸??ÂµÄ¹Ì¼?,PB¿ªÊ¼Ö´?Ð¾É³??ò´???")==0) //?????
+..\HARDWARE\usart.c(833): warning:  #167-D: argument of type "u8 *" is incompatible with parameter of type "const char *"
+                        if(strcmp(USART3_RX_BUF,"PB?ý³£¸??Â²????ê³?")==0) //?????
+..\HARDWARE\usart.c: 15 warnings, 0 errors
+linking...
+Program Size: Code=11712 RO-data=268 RW-data=92 ZI-data=19044  
+FromELF: creating hex file...
+After Build - User command #1: fromelf.exe --bin -o "..\OUTPUT\USB HUB CODE.bin" "..\OUTPUT\USB HUB CODE.axf"
+"..\OUTPUT\USB HUB CODE.axf" - 0 Error(s), 15 Warning(s).
+
+<h2>Collection of Component include folders:</h2>
+  G:\¹¤×÷MDS\CODE 7.9\4.22µÚ¶þ°æCODE\4.27ÖÕ¼«°æË«°å´úÂë£¨Ä¿Ç°£©\IAP v 7.19\USB HUB CODE v 5.24\USER\RTE
+  F:\keil 5\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include
+
+<h2>Collection of Component Files used:</h2>
+</pre>
+</body>
+</html>
